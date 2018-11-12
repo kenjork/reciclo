@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import TrashCan, Level
+from .models import TrashCan, Level, Harvest
 
 @admin.register(TrashCan)
 class TrashCanAdmin(admin.ModelAdmin):
@@ -30,4 +30,19 @@ class LevelAdmin(admin.ModelAdmin):
         'trash_can',
         'time',
         'distance',
+    )
+
+@admin.register(Harvest)
+class HarvestAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'id',
+        'user',
+        'trash_can',
+        'date',
+        'status',
+    )
+
+    list_filter = (
+        'status',
     )

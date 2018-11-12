@@ -1,4 +1,6 @@
+from django.contrib.auth.models import User
 from django.db import models
+
 
 # Create your models here.
 class TrashCan(models.Model):
@@ -24,6 +26,11 @@ class TrashCan(models.Model):
         blank = True,
     )
 
+    recyclers = models.ManyToManyField(
+        User,
+        through='Harvest',
+    )
+
     def __str__(self):
         return str(self.pk)
 
@@ -47,18 +54,51 @@ class Level(models.Model):
         help_text = 'Distancia del cesor a la basura cm'
     )
     
-
-
-
-
-
     class Meta:
         db_table = 'level'
 
     def __str__(self):
         return str(self.pk)
 
+class Harvest(models.Model):
 
+    #La relación de uno más mucho siempre tiene que estar los parametros. User, on_delete, related_name
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="Level",
+    )
+
+    trash_can = models.ForeignKey(
+        TrashCan,
+        on_delete=models.CASCADE,
+        related_name="TrashCan",
+    )
+
+    date = models.DateField()
+
+    STATUS = (
+        (0, 'Por Recoger'),
+        (1, 'Trabajo Hecho'),
+    )
+
+    status = models.BooleanField(
+        max_length=50,
+        choices=STATUS,
+        default=0,
+    )
+
+    comment = models.TextField(
+        blank=True,
+        null=True,
+    )
+
+    def __str__(self):
+        return str(self.pk)
+
+    class Meta:
+        db_table = 'harvest'
+        unique_together = ('user','trash_can','date')
 
 #
 
