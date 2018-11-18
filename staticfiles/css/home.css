@@ -1,0 +1,10 @@
+
+.tachos, .sesion{
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.spacing{
+    margin-right: 10px;
+}
