@@ -14,10 +14,26 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
+from django.urls import include, path
+from trashcan.views import TrashCanViewSet, LevelViewSet
+from rest_framework import routers
 
-
+router = routers.DefaultRouter()
+router.register('trash-cans', TrashCanViewSet)
+router.register('levels', LevelViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    #Trashcan
+    path('cans/', include('trashcan.urls', namespace='trashcan_app')),
+    #Home
+    path('', include('home.urls', namespace='home_app')),
+
+    path('api-auth/', include('rest_framework.urls', namespace='rest_app')),
+    path('api/', include(router.urls)),
+
+
+
 ]

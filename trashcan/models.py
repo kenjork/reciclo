@@ -13,6 +13,15 @@ class TrashCanQuerySet(models.QuerySet):
         )
 
 
+
+    def get_lat_lng(self):
+        return self.filter(
+            lat__isnull=False,
+            lng__isnull=False
+
+        )
+
+
     def get_barcode(self):
         return self.filter(
             ~Q(barcode=''),
@@ -28,9 +37,7 @@ class TrashCanQuerySet(models.QuerySet):
         return self.get_barcode().count()
     
 
-    def get_queryset(self):
-        return super().get_queryset().filter()
-
+    
 
 
 class TrashCan(models.Model):
@@ -73,14 +80,14 @@ class TrashCan(models.Model):
     def tiene_address(self):
         return self.has_address()
 
-    def set_address(self):
-        if self.tiene_address:
-            return
-        self.address='Almacen Principal'
+    #def set_address(self):
+        #if self.tiene_address:
+            #return
+        #self.address='Almacen Principal'
 
-    def save(self,*args, **kwargs):
-        self.set_address()
-        super(TrashCan, self).save(*args, **kwargs)
+    #def save(self,*args, **kwargs):
+        #self.set_address()
+        #super(TrashCan, self).save(*args, **kwargs)
 
 
     def __str__(self):
@@ -88,6 +95,13 @@ class TrashCan(models.Model):
 
     class Meta:
         db_table = 'trash_can'
+
+
+
+class LevelQuerySet(models.QuerySet):
+
+    def get_levels(self, trash_can_pk):
+        return self.filter(trash_can=trash_can_pk).order_by('-time')
 
 
 class Level(models.Model):
@@ -105,6 +119,9 @@ class Level(models.Model):
     distance = models.FloatField(
         help_text = 'Distancia del cesor a la basura cm'
     )
+
+    objects = LevelQuerySet.as_manager()
+
     
     class Meta:
         db_table = 'level'

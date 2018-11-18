@@ -1,0 +1,61 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <title>Inicio</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+<body>
+    <style>
+        a:hover{
+            text-decoration: none;
+        }
+    </style>
+    <div class="container">
+        <div class="col-md-12 ">
+            <h1 class="text-center mt-5 mb-5">Bienvenido
+                
+                {% if user.is_authenticated %}
+                    {{user.first_name}}
+                {% endif %}
+                    
+
+            </h1>
+            <p class="text-center">Con esta aplicación puedes saber como esta los tachos inteligentes</p>
+        </div>
+        {% if user.is_authenticated %}
+            <div class="col-md-12">
+                <div class="tachos">
+                    <a href="{% url 'trashcan_app:can-list' %}" class="spacing">
+                        <button type="button" class="btn  btn-info">Ver Tachos</button>
+                    </a>
+                    <a href="{% url 'home_app:logout' %}">
+                        <button type="button" class="btn btn-outline-danger">Cerrar Sesión</button>
+                    </a>
+                </div>  
+            </div>
+        {% else %}
+            <div class="col-md-12">
+                <div class="sesion">
+                    <a href="{% url 'home_app:login' %}" class="spacing">
+                        <button type="button" class="btn btn-primary">Iniciar Sesión</button>
+                    </a>
+                    <a href="{% url 'home_app:signup' %}">
+                        <button type="button" class="btn btn-success">Registro</button>
+                    </a>
+                </div>
+            </div>            
+        {% endif %}
+            
+
+
+
+
+    </div>
+</body>
+</html>
